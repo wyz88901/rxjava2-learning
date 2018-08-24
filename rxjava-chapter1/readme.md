@@ -38,8 +38,8 @@ Maybe: 能够发射0或者1个数据，要么成功，要么失败。有点类�
 
 Subject定义: 
  1. Subject是一个代理，它既是Observer，也是Observable。
- 2. 它是一个Observer，它可以订阅一个或多个Observable;
- 3. 它是一个Observable，它又可以被其他的Observer订阅。
+ 2. 作为一个Observer一个Observer，它可以订阅一个或多个Observable;
+ 3. 它作为一个Observer一个Observable，它又可以被其他的Observer订阅。
  4. 它可以传递/转发作为Observer收到的值，也可以主动发射值
  5. Subject不是线程安全的,在多线程情况下,需要使用Subject.create().toSerialized()
 Subject分类:
