@@ -6,14 +6,15 @@
 
   <groupId>com.ywei.test.rxjava</groupId>
   <artifactId>rxjava2-learning</artifactId>
-  <version>1.0-SNAPSHOT</version>
+    <packaging>pom</packaging>
+    <version>1.0-SNAPSHOT</version>
 
   <name>rxjava2-learning</name>
-  <!-- FIXME change it to the project's website -->
   <url>https://github.com/wyz88901/rxjava2-learning</url>
 
   <modules>
     <module>rxjava-chapter1</module>
+      <module>rxjava-chapter2</module>
   </modules>
 
   <properties>
