@@ -22,19 +22,22 @@ Hot Observable转换成Cold Observable
  使用ConnectableObservable的refCount()
 
 
-RxJava 2.0五种观察者模式:
-    Observable 和 Observer
-    Flowable 和 Subscriber
-    Single 和SingleObserver
-    Completable和CompletableObserver
-    Maybe 和MaybeObserver
-
+RxJava 2.0五种观察者模式: 
+    Observable 和 Observer     
+    Flowable 和 Subscriber  
+    Single 和SingleObserver 
+    Completable和CompletableObserver 
+    Maybe 和MaybeObserver 
+ ![](./image/design_pattern.png)   
+    
 Observable:	能够发射0或n个数据，并以成功或错误事件终止。
 Flowable: 能够发射0或n个数据，并以成功或错误事件终止。支持Backpressure，可以控制数据源发射的速度。
 Single:	只发射单个数据或错误事件。
 Completable: 它从来不发射数据，只处理 onComplete 和 onError 事件。
 Maybe: 能够发射0或者1个数据，要么成功，要么失败。有点类似于Optional
 
+Do操作符: 
+ ![](./image/do.png) 
 
 Subject定义: 
  1. Subject是一个代理，它既是Observer，也是Observable。
