@@ -22,9 +22,9 @@ class MaybeDemo extends GroovyTestCase{
         Maybe.create(new MaybeOnSubscribe<String>() {
             @Override
             void subscribe(@NonNull MaybeEmitter<String> emitter) throws Exception {
-              //  emitter.onComplete()
+             //   emitter.onComplete()
                 emitter.onSuccess("test Maybe ")  //只会发一次数据，即使后面跟onComplete(),也不会发射
-                //  emitter.onComplete()
+                 emitter.onComplete()
             }
         }).subscribe(new MaybeObserver<String>() {
             @Override

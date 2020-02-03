@@ -6,6 +6,7 @@ import io.reactivex.SingleObserver
 import io.reactivex.SingleOnSubscribe
 import io.reactivex.annotations.NonNull
 import io.reactivex.disposables.Disposable
+import io.reactivex.functions.BiConsumer
 import io.reactivex.functions.Consumer
 
 /**
@@ -53,7 +54,13 @@ class SingleDemo  extends GroovyTestCase{
         Single.create(new SingleOnSubscribe<String>() {
             @Override
             void subscribe(@NonNull SingleEmitter<String> emitter) throws Exception {
-                emitter.onSuccess("test single...")
+                try {
+                    emitter.onSuccess("test single...")  // onSuccess, onError 二者只能选其一,不能同时发送
+                    //  emitter.onSuccess("test single 2...")
+                    throw new Exception("test single error")
+                }catch (Exception e){
+                    emitter.onError(e)
+                }
             }
         }).subscribe(new Consumer<String>() {
             @Override
@@ -64,6 +71,26 @@ class SingleDemo  extends GroovyTestCase{
             @Override
             void accept(Throwable throwable) throws Exception {
                 println "single receive error msg: " + e.getMessage()
+            }
+        })
+    }
+
+    def void testSignleOptimizationConsumer(){
+        Single.create(new SingleOnSubscribe<String>() {
+            @Override
+            void subscribe(@NonNull SingleEmitter<String> emitter) throws Exception {
+           //   emitter.onSuccess("test single") // onSuccess, onError 二者只能选其一,不能同时发送
+                emitter.onError(new Throwable("test single error"))
+            }
+        }).subscribe(new BiConsumer<String, Throwable>() {
+            @Override
+            void accept(String t, Throwable throwable) throws Exception {
+                if(throwable == null){
+                    println "OptimizationConsumer single receive  msg: ${t}"
+                }else{
+                    println "OptimizationConsumer single receive error : ${throwable.getMessage()}"
+                }
+
             }
         })
     }

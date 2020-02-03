@@ -1,6 +1,9 @@
 package com.ywei.test.rxjava.hotCold
 
 import io.reactivex.Observable
+import io.reactivex.ObservableEmitter
+import io.reactivex.ObservableOnSubscribe
+import io.reactivex.annotations.NonNull
 import io.reactivex.disposables.Disposable
 import io.reactivex.functions.Consumer
 import io.reactivex.observables.ConnectableObservable
@@ -35,13 +38,33 @@ class HotObservable extends GroovyTestCase {
             }
         }
 
-        Observable<Long> observable =  Observable.interval(10,TimeUnit.MILLISECONDS,Schedulers.io())
-                .take(30).subscribeOn(Schedulers.io()).publish().refCount()
-       // connectableObservable.connect()
-      //  Observable<Long> observable = connectableObservable.refCount()
+        Consumer subscriber3 = new Consumer<Long>() {
+            @Override
+            void accept(Long aLong) throws Exception {
+                println "   subscriber3 : $aLong"
+            }
+        }
 
-       Disposable disposable1 = observable.subscribe(subscriber1)
-       Disposable disposable2 = observable.subscribe(subscriber2)
+        Observable<Long> connectableObservable =  Observable.interval(10,TimeUnit.MILLISECONDS,Schedulers.io())
+                .take(30).subscribeOn(Schedulers.io()).publish()
+
+
+        /*Observable<Long> connectableObservable = Observable.create(new ObservableOnSubscribe<Long>() {
+            @Override
+            void subscribe(@NonNull ObservableEmitter<Long> emitter) throws Exception {
+                Observable.interval(10,TimeUnit.MILLISECONDS,Schedulers.computation())
+                        .take(100).subscribe(emitter::onNext)
+            }
+        }).observeOn(Schedulers.newThread()).publish()*/
+
+        connectableObservable.connect()
+
+
+        Observable<Long> observable = connectableObservable.refCount()
+        Disposable disposable1 = observable.subscribe(subscriber1)
+        Disposable disposable2 = observable.subscribe(subscriber2)
+        observable.subscribe(subscriber3)
+
         Thread.sleep(1000)
          disposable1.dispose()
         disposable2.dispose()

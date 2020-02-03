@@ -28,8 +28,9 @@ class CompletableDemo extends GroovyTestCase{
             @Override
             void subscribe(@NonNull CompletableEmitter emitter) throws Exception {
                 try {
-                    //emitter.onComplete();
-                     throw new Exception("test Completable");
+                    println " prepare complete data "
+                    emitter.onComplete();  //
+                    //  throw new Exception("test Completable");
                 }catch (Exception e){
                     emitter.onError(e)
                 }
@@ -57,7 +58,7 @@ class CompletableDemo extends GroovyTestCase{
             @Override
             void subscribe(@NonNull CompletableEmitter emitter) throws Exception {
                 try {
-                    emitter.onComplete();
+                    emitter.onComplete();  // onComplete(). onError() 同时只能发送一个,不可同时发送;否则会报错
                    // emitter.onComplete();
                    // throw new Exception("test Completable");
                 }catch (Exception e){

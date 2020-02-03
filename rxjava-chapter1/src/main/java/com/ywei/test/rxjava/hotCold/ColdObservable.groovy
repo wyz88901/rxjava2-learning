@@ -19,6 +19,7 @@ import java.util.concurrent.TimeUnit
  */
 class ColdObservable extends GroovyTestCase {
 
+    // 每个Observer都是独立的
     def void testColdObservalbe(){
         Consumer subscriber1 = new Consumer<Long>() {
             @Override
@@ -75,7 +76,7 @@ class ColdObservable extends GroovyTestCase {
 
         ConnectableObservable<Long> observable =  Observable.interval(10,TimeUnit.MILLISECONDS,Schedulers.io())
                 .take(200).subscribeOn(Schedulers.io()).publish()
-        observable.connect()
+        observable.connect() // 生成的connectableObservable需要调connect()才能真正执行
 
         observable.subscribe(subscriber1)
         observable.subscribe(subscriber2)
@@ -84,5 +85,35 @@ class ColdObservable extends GroovyTestCase {
         observable.subscribe(subscriber3)
 
         Thread.sleep(30000L)
+    }
+
+    def void testColdObservable1(){
+        Consumer subscriber1 = new Consumer<Long>() {
+            @Override
+            void accept(Long aLong) throws Exception {
+                println "subscriber1 : $aLong"
+            }
+        }
+
+        Consumer subscriber2 = new Consumer<Long>() {
+            @Override
+            void accept(Long aLong) throws Exception {
+                println "   subscriber2 : $aLong"
+            }
+        }
+
+        Observable<Long> observable = Observable.create(new ObservableOnSubscribe<Long>() {
+            @Override
+            void subscribe(@NonNull ObservableEmitter<Long> emitter) throws Exception {
+                Observable.interval(10,TimeUnit.MILLISECONDS,Schedulers.computation())
+                .take(100).subscribe(emitter::onNext)
+            }
+        }).observeOn(Schedulers.newThread())
+
+        observable.subscribe(subscriber1)
+        observable.subscribe(subscriber2)
+
+        Thread.sleep(10000L)
+
     }
 }
