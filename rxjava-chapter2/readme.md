@@ -31,4 +31,8 @@ observerOn(): 接收一个Scheduler参数，来指定下游操作运行在特定
   * map操作符: 对Observable发射的每一项数据应用一个函数，执行变换操作 
     ![](./image/map.png) 
   * flatMap 操作符: 将一个发射数据的Observable变换为多个Observables，然后将它们发射的数据合并后放进一个单独的Observable
-    ![](./image/flatMap.png)                
+    ![](./image/flatMap.png)    
+    
+ 
+背压策略:
+            
